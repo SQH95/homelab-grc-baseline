@@ -29,7 +29,6 @@ This project documents the design, implementation, and operation of a small-scal
 | Wazuh (Planned) | SIEM / Detection | VM on Proxmox |
 | Windows AD (Planned) | Identity / Access Control | VM on Proxmox, isolated lab bridge |
 
-[Include a simple ASCII network diagram or link to a visual]
 
 ### Network Layout
 - **Management VLAN (planned):** Infrastructure access via Tailscale
