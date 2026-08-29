@@ -10,7 +10,9 @@ This project documents the design, implementation, and operation of a small-scal
 - Incident detection and response capabilities
 - Risk management and compliance thinking
 
-**Intended audience:** Security practitioners, hiring managers, portfolio reviewers.
+**Intended audience:** Network/Security practitioners, HomeLab enthusiasts, hiring managers, portfolio reviewers.
+
+[See implementation log for current progress.](##-implementation-log)
 
 ---
 
