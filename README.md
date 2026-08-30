@@ -44,13 +44,13 @@ Current implementation status mapped to CIS Controls v8:
 ### Implemented Controls
 
 **CIS 1: Inventory of Enterprise Assets**
-- [ ] Asset inventory documented (systems, IPs, roles)
-- [ ] Git repo serves as single source of truth
+- [x] Asset inventory documented (systems, IPs, roles)
+- [x] Git repo serves as single source of truth
 - **Evidence:** IPAM table in this repo
 
 **CIS 2: Inventory of Software Assets**
 - [ ] OS/application versions tracked per system
-- [ ] Patch status monitored (Ubuntu updates, Pi OS, QTS)
+- [x] Patch status monitored (Ubuntu updates, Pi OS, QTS)
 - **Evidence:** System config documentation
 
 **CIS 3: Address Unauthorized Software**
