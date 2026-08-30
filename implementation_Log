@@ -1,0 +1,138 @@
+# Implementation Log
+
+Timeline of homelab security program development.
+
+## Week 1: Infrastructure & Foundation
+
+- [x] Built Proxmox host (Dell OptiPlex, i5-9500, 32GB RAM)
+- [x] Installed Proxmox VE (bare metal on NVMe)
+- [x] Configured network: static IPs, DHCP pool
+- [x] Set static IP for Proxmox host (192.168.10.5)
+- [x] Deployed Pi-hole DNS (LXC container on Proxmox)
+- [x] Deployed Pi-hole (Raspberry Pi 2B, primary DNS 192.168.10.99)
+- [x] Configured Tailscale subnet router (LXC container)
+- [x] Tested remote access via Tailscale (verified from cellular)
+- [x] Implemented CIS Controls 5, 6, 13 (access control, network security)
+
+**Status:** Core infrastructure live and accessible.
+
+---
+
+## Week 2: SIEM Deployment (CIS Control 8)
+
+### Objective
+Deploy centralized logging and real-time detection capability to prove audit logging and monitoring.
+
+### Completed Actions
+
+**Part 1: Lab Network Isolation**
+- [x] Created isolated lab bridge (vmbr1) on Proxmox
+- [x] Configured for future attack/defense exercises
+- **Time:** 15 minutes
+
+**Part 2: Wazuh SIEM Deployment**
+- [x] Created Wazuh VM (ID 200, Ubuntu 22.04 Server)
+  - CPU: 4 cores
+  - RAM: 8GB
+  - Disk: 100GB
+  - IP: 192.168.10.50
+- [x] Installed Wazuh manager and dashboard
+- [x] Created custom admin account (changed default credentials)
+- [x] Dashboard accessible at https://192.168.10.50:443
+- **Time:** ~45 minutes
+
+**Part 3: Agent Enrollment**
+- [x] Deployed Wazuh agent on Proxmox host (192.168.10.5)
+  - Downloaded latest agent from Wazuh repo
+  - Configured <client> section with manager IP and port 1514
+  - Verified service running and active
+- [x] Deployed Wazuh agent on Windows 11 desktop
+  - Same installation and configuration process
+  - Both agents showed **Active** in dashboard within 60 seconds
+- **Time:** ~20 minutes
+
+**Part 4: First Detection Test**
+- [x] Generated SSH login failures (5 attempts with wrong credentials)
+- [x] Observed real-time alerts in Wazuh dashboard
+- [x] Captured screenshots of:
+  - Active agents (Management → Agents)
+  - SSH failure events (Monitoring → Events)
+- [x] Verified full detection pipeline: event → capture → ingest → display
+- **Time:** ~15 minutes
+
+### Lessons Learned
+1. Always reference official vendor documentation (Wazuh docs, not third-party guides)
+2. Version numbers matter (4.x vs 5.x in repository URLs)
+3. `apt install` for .deb packages handles dependencies better than `dpkg`
+4. Agent config typos cause silent failures — double-check `<client>` IP/port
+5. Agents take ~60 seconds to appear in dashboard after starting
+6. Browser performance can lag when Wazuh processes first agent logs (normal)
+
+### CIS Control 8 Status: ✅ IMPLEMENTED
+
+**Evidence:**
+- Wazuh SIEM live at 192.168.10.50
+- 2 active agents (Proxmox + Windows)
+- Real-time detection verified (SSH brute-force alerts)
+- 30-day log retention configured
+- Screenshots added to repo
+
+**What This Proves:**
+- ✅ System logging enabled
+- ✅ Centralized log aggregation working
+- ✅ Real-time detection operational
+- ✅ Full visibility into infrastructure events
+
+### Artifacts Created
+- Wazuh_Deployment_Guide_Complete.docx (step-by-step guide)
+- wazuh-agents-active.png (proof of agents)
+- wazuh-ssh-detections.png (proof of detection)
+
+---
+
+## Week 3: Next Steps (Planned)
+
+- [ ] Build Windows AD lab (domain controller + client VM)
+  - Implement CIS Controls 5, 6 (access/identity management)
+  - Create domain users, GPOs, hardening baselines
+  - Estimated: 1-2 weeks
+
+- [ ] Attack/Defense Exercises on vmbr1
+  - Deploy DVWA or Metasploitable on isolated bridge
+  - Perform attacks → observe Wazuh detections
+  - Document findings and response actions
+
+- [ ] NAS Procurement & Deployment
+  - QNAP TS-462A (4-bay, 2.5GbE)
+  - Configure RAID 1 (2 drives), expand to RAID 5 later
+  - Set up NFS for Proxmox backups
+  - Deploy Jellyfin + Nextcloud
+
+- [ ] Backup Testing
+  - Implement 3-2-1 backup strategy
+  - Proxmox Backup Server → NAS
+  - Offsite backups via Backblaze B2
+  - Restore drills (proof of recovery)
+
+---
+
+## Timeline Summary
+
+| Week | Objective | Status |
+|------|-----------|--------|
+| 1 | Infrastructure foundation | ✅ Complete |
+| 2 | SIEM & detection | ✅ Complete |
+| 3-4 | Identity & access (AD lab) | ⏳ Planned |
+| 5-6 | Attack/defense exercises | ⏳ Planned |
+| 7-8 | NAS + backups | ⏳ Planned |
+
+---
+
+## GRC Mapping
+
+This implementation serves as a proof-of-concept for a small-scale security program:
+- **Framework:** CIS Controls v8
+- **Scope:** Home lab (non-production)
+- **Audience:** Hiring managers, portfolio reviewers, lab enthusiasts
+- **Goal:** Demonstrate practical security thinking and execution
+
