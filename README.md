@@ -73,9 +73,10 @@ Current implementation status mapped to CIS Controls v8:
 
 **CIS 8: Audit Logging**
 - [x] System logging enabled (Proxmox, Pi-hole query logs)
-- [ ] Centralized log aggregation via Wazuh (planned)
-- [ ] Long-term log retention (planned)
-- **Evidence:** Wazuh deployment plan
+- [x] Centralized log aggregation via Wazuh (deployed 192.168.10.50)
+- [x] Real-time detection verified (SSH brute-force test)
+- [x] 30-day log retention configured
+- **Evidence:** Wazuh deployment guide + screenshots in repo
 
 **CIS 13: Network Infrastructure Management**
 - [x] Firewall enabled (TP-Link, hardened)
@@ -109,9 +110,9 @@ Current implementation status mapped to CIS Controls v8:
 4. **Malware in lab environment** → Impact: lab-only (by design), mitigation: isolation + detection
 
 ### Current Posture
-- **Strong:** Network isolation, access control, redundancy on critical services
-- **Weak:** Centralized logging (not yet deployed), vulnerability scanning (planned)
-- **Risk Score:** Medium (non-production environment, mitigated by isolation)
+- **Strong:** Network isolation, access control, redundancy on critical services, centralized logging (Wazuh SIEM deployed)
+- **Weak:** Vulnerability scanning (planned), automated incident response (planned)
+- **Risk Score:** Medium → Low-Medium (non-production environment, detection/response capabilities now in place)
 
 ---
 
@@ -119,7 +120,7 @@ Current implementation status mapped to CIS Controls v8:
 
 | ID | Control | Gap | Action | Owner | Target Date | Status |
 |----|---------|-----|--------|-------|------------|--------|
-| 1 | CIS 8, 13 | No centralized logging | Deploy Wazuh SIEM | Sam | Week 2 | Not Started |
+| 1 | CIS 8, 13 | No centralized logging | Deploy Wazuh SIEM | Sam | Week 2 | ✅ COMPLETED |
 | 2 | CIS 10 | No backup testing | Restore a VM from backup | Sam | Week 2 | Not Started |
 | 3 | CIS 5, 6 | Manual AD management | Deploy Windows AD lab | Sam | Week 3-4 | Not Started |
 | 4 | CIS 4 | No vuln scanning | Wazuh vulnerability module | Sam | Week 4 | Not Started |
@@ -127,6 +128,4 @@ Current implementation status mapped to CIS Controls v8:
 
 ---
 
-## 🚨 Incident Response
 
-### Alert Flow
