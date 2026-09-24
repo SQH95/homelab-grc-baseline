@@ -71,7 +71,7 @@ Deploy centralized logging and real-time detection capability to prove audit log
 ### CIS Control 8 Status: ✅ IMPLEMENTED
 
 **Evidence:**
-- Wazuh SIEM live at 192.168.10.50
+- Wazuh SIEM live at 192.168.XXX.XXX
 - 2 active agents (Proxmox + Windows)
 - Real-time detection verified (SSH brute-force alerts)
 - 30-day log retention configured
@@ -90,36 +90,7 @@ Deploy centralized logging and real-time detection capability to prove audit log
 
 ---
 
-## Week 3: Media Stack & Automation (Jellyfin + Arr Stack)
 
-**Objective:** Deploy end-to-end media automation pipeline for infrastructure testing and portfolio demonstration.
-
-**Services Deployed:**
-- **Jellyfin (LXC CT 102):** Media server for local streaming
-- **Prowlarr (LXC CT 103):** NZB indexer manager (connected to NZBGeek)
-- **SABnzbd (LXC CT 104):** Usenet downloader (Eweka newsserver, port 563 SSL)
-- **Sonarr (LXC CT 105):** TV show automation
-- **Radarr (LXC CT 106:** Movie automation
-
-**Key Challenge Resolved:**
-Unprivileged LXC containers could not write to CIFS-mounted NAS storage despite running as root. Root cause: Proxmox unprivileged container UID mapping shifts root (UID 0) to host UID 100000, which was incompatible with CIFS mount ownership.
-
-**Solution:**
-1. Remounted CIFS share on Proxmox host with explicit UID/GID parameters: `uid=100000,gid=100000,file_mode=0777,dir_mode=0777`
-2. Updated `/etc/fstab` entry to persist mount options across reboots
-3. Verified write access from container with `touch /mnt/media/test.txt`
-4. Configured download client connections (Radarr/Sonarr → SABnzbd)
-
-**End-to-End Pipeline Verified:**
-- Added movie to Radarr → Prowlarr indexed NZB → SABnzbd downloaded → File moved to `/mnt/media/Movies/` → Jellyfin scanned and populated library ✅
-
-**Files:**
-- All services configured with systemd services running as dedicated users
-- Prowlarr, SABnzbd, Sonarr, Radarr connected via API keys
-- Jellyfin library pointing to `/mnt/media/Movies/` and `/mnt/media/TV Shows/` bind mounts
-
-**Status:** ✅ IMPLEMENTED — Full automation pipeline working end-to-end
----
 
 ## Timeline Summary
 
@@ -127,9 +98,9 @@ Unprivileged LXC containers could not write to CIFS-mounted NAS storage despite 
 |------|-----------|--------|
 | 1 | Infrastructure foundation | ✅ Complete |
 | 2 | SIEM & detection | ✅ Complete |
-| 3-4 | Identity & access (AD lab) | ⏳ Planned |
+| 3-4 | Identity & access (Windows AD lab) | ⏳ In Progress |
 | 5-6 | Attack/defense exercises | ⏳ Planned |
-| 7-8 | NAS + backups | ⏳ Planned |
+| 7-8 | Incident response playbooks | ⏳ Planned |
 
 ---
 
