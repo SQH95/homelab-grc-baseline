@@ -24,8 +24,13 @@ This project documents the design, implementation, and operation of a small-scal
 | Pi-hole (CT) | DNS / Network Control | LXC container on Proxmox |
 | Tailscale (CT) | Remote Access / VPN | Subnet router, encrypted tunnel |
 | Raspberry Pi 2B | DNS Redundancy | Primary DNS, independent hardware |
-| NAS (Planned) | Storage / Backups | QNAP TS-462A, RAID 1/5 |
-| Wazuh (Planned) | SIEM / Detection | VM on Proxmox |
+| NAS | Storage / Backups | QNAP TS-462A (4-bay, RAID 1, 4TB usable, Scalability Planned for RAID 5) |
+| Wazuh SIEM | Centralized logging / Detection | VM 200, Ubuntu 22.04 |
+| Jellyfin | Media streaming | LXC CT 102 |
+| Prowlarr | NZB indexer manager | LXC CT 103 |
+| SABnzbd | Usenet downloader | LXC CT 104 |
+| Sonarr | TV automation | LXC CT 105 |
+| Radarr | Movie automation | LXC CT 106 |
 | Windows AD (Planned) | Identity / Access Control | VM on Proxmox, isolated lab bridge |
 
 
