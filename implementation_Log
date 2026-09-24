@@ -90,30 +90,35 @@ Deploy centralized logging and real-time detection capability to prove audit log
 
 ---
 
-## Week 3: Next Steps (Planned)
+## Week 3: Media Stack & Automation (Jellyfin + Arr Stack)
 
-- [ ] Build Windows AD lab (domain controller + client VM)
-  - Implement CIS Controls 5, 6 (access/identity management)
-  - Create domain users, GPOs, hardening baselines
-  - Estimated: 1-2 weeks
+**Objective:** Deploy end-to-end media automation pipeline for infrastructure testing and portfolio demonstration.
 
-- [ ] Attack/Defense Exercises on vmbr1
-  - Deploy DVWA or Metasploitable on isolated bridge
-  - Perform attacks → observe Wazuh detections
-  - Document findings and response actions
+**Services Deployed:**
+- **Jellyfin (LXC CT 102):** Media server for local streaming
+- **Prowlarr (LXC CT 103):** NZB indexer manager (connected to NZBGeek)
+- **SABnzbd (LXC CT 104):** Usenet downloader (Eweka newsserver, port 563 SSL)
+- **Sonarr (LXC CT 105):** TV show automation
+- **Radarr (LXC CT 106:** Movie automation
 
-- [ ] NAS Procurement & Deployment
-  - QNAP TS-462A (4-bay, 2.5GbE)
-  - Configure RAID 1 (2 drives), expand to RAID 5 later
-  - Set up NFS for Proxmox backups
-  - Deploy Jellyfin + Nextcloud
+**Key Challenge Resolved:**
+Unprivileged LXC containers could not write to CIFS-mounted NAS storage despite running as root. Root cause: Proxmox unprivileged container UID mapping shifts root (UID 0) to host UID 100000, which was incompatible with CIFS mount ownership.
 
-- [ ] Backup Testing
-  - Implement 3-2-1 backup strategy
-  - Proxmox Backup Server → NAS
-  - Offsite backups via Backblaze B2
-  - Restore drills (proof of recovery)
+**Solution:**
+1. Remounted CIFS share on Proxmox host with explicit UID/GID parameters: `uid=100000,gid=100000,file_mode=0777,dir_mode=0777`
+2. Updated `/etc/fstab` entry to persist mount options across reboots
+3. Verified write access from container with `touch /mnt/media/test.txt`
+4. Configured download client connections (Radarr/Sonarr → SABnzbd)
 
+**End-to-End Pipeline Verified:**
+- Added movie to Radarr → Prowlarr indexed NZB → SABnzbd downloaded → File moved to `/mnt/media/Movies/` → Jellyfin scanned and populated library ✅
+
+**Files:**
+- All services configured with systemd services running as dedicated users
+- Prowlarr, SABnzbd, Sonarr, Radarr connected via API keys
+- Jellyfin library pointing to `/mnt/media/Movies/` and `/mnt/media/TV Shows/` bind mounts
+
+**Status:** ✅ IMPLEMENTED — Full automation pipeline working end-to-end
 ---
 
 ## Timeline Summary
